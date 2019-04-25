@@ -11,7 +11,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 参看：https://github.com/yinjihuan/netty-im
+ * 参看：https://github.com/smartbooks/netty-example
  */
 @Slf4j
 public class NettyServer {

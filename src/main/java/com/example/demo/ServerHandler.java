@@ -20,7 +20,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        ctx.writeAndFlush("s");
+        ctx.writeAndFlush("hi");
     }
 
     @Override

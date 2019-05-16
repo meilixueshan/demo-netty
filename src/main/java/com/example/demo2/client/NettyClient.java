@@ -69,8 +69,7 @@ public class NettyClient {
                             public void run() {
                                 log.error("服务器连不上，开始重连操作...");
 
-                                NettyClient client = new NettyClient(NettyHostPort.HOST, NettyHostPort.PORT);
-                                client.start();
+                                start();
                             }
                         }, 1L, TimeUnit.SECONDS);
                     }

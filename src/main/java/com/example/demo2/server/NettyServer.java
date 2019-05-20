@@ -58,6 +58,7 @@ public class NettyServer {
     }
 
     public static void main(String[] args) throws Exception {
-        new NettyServer().run(NettyHostPort.PORT);    //启动server服务
+        //new NettyServer().run(NettyHostPort.PORT);    //启动server服务
+        System.out.println((byte)0xAA);
     }
 }

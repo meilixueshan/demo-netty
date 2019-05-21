@@ -16,7 +16,7 @@ public class CustomMsg implements Serializable {
     //类型  系统编号 1 表示A系统，2 表示B系统
     private byte type;
 
-    //信息标志  -128表示心跳包  -127表示超时包  -126登录包   -125退出包  1...127业务信息包
+    //信息标志  0xAA表示心跳包  0xAB表示超时包  0xAC登录包   0xAD退出包  其它为业务信息包
     private byte flag;
 
     //主题信息的长度

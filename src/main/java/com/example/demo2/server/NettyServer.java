@@ -1,6 +1,7 @@
 package com.example.demo2.server;
 
 import com.example.demo2.NettyHostPort;
+import com.example.demo2.coder.CustomDecoder;
 import com.example.demo2.coder.CustomEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -26,13 +27,14 @@ public class NettyServer {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
-                        p.addLast(new LengthFieldBasedFrameDecoder(
+                        /*p.addLast(new LengthFieldBasedFrameDecoder(
                                 NettyHostPort.MAX_FRAME_LENGTH,
                                 NettyHostPort.LENGTH_FIELD_OFFSET,
                                 NettyHostPort.LENGTH_FIELD_LENGTH,
                                 NettyHostPort.LENGTH_ADJUSTMENT,
                                 NettyHostPort.INITIAL_BYTES_TO_STRIP,
-                                false));
+                                false));*/
+                        p.addLast(new CustomDecoder());
                         p.addLast(new CustomEncoder());
                         p.addLast(new ServerHandler());
                     }

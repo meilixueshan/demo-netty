@@ -2,7 +2,6 @@ package com.example.demo2.client;
 
 import com.example.demo2.NettyHostPort;
 import com.example.demo2.protocol.CustomMsg;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.EventLoop;
@@ -16,18 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-
-        byte type = buf.readByte();
-        byte flag = buf.readByte();
-        int length = buf.readInt();
-
-        int len = buf.readableBytes();
-        byte[] req = new byte[len];
-        buf.readBytes(req);
-        String body = new String(req, "UTF-8");
-
-        CustomMsg entityMessage = new CustomMsg(type, flag, length, body);
+        CustomMsg entityMessage = (CustomMsg) msg;
 
         System.out.println(String.format("ip:%s %s", ctx.channel().remoteAddress(), entityMessage));
     }

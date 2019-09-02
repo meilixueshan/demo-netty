@@ -2,11 +2,10 @@ package com.example.demo2.server;
 
 import com.example.demo2.protocol.CustomMsg;
 import com.example.demo2.protocol.ProtocolFlag;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -15,30 +14,26 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-public class ServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
-        byte type = byteBuf.readByte();
-        byte flag = byteBuf.readByte();
-        int length = byteBuf.readInt();
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg == null) {
+            throw new Exception("msg为空！");
+        }
 
-        int len = byteBuf.readableBytes();
-        byte[] req = new byte[len];
-        byteBuf.readBytes(req);
-        String body = new String(req, "UTF-8");
 
-        CustomMsg entityMessage = new CustomMsg(type, flag, length, body);
+        CustomMsg entityMessage = (CustomMsg) msg;
 
         System.out.println(String.format("ip:%s %s", ctx.channel().remoteAddress(), entityMessage));
 
         entityMessage.setBody(String.format("server:%s orogin:%s", System.currentTimeMillis(), entityMessage.getBody()));
 
         //如果是登录消息，消息体就是userId。记录userId和channelId的映射关系
-        if (flag == ProtocolFlag.FLAG_LOGIN) {
+        if (entityMessage.getFlag() == ProtocolFlag.FLAG_LOGIN) {
             ClientChannel.put(entityMessage.getBody(), ctx.channel().id());
-        } else if (flag == ProtocolFlag.FLAG_LOGOUT) {
+        } else if (entityMessage.getFlag() == ProtocolFlag.FLAG_LOGOUT) {
             ClientChannel.remove(entityMessage.getBody());
         } else {
             //转发消息

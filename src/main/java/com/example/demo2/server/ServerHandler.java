@@ -19,10 +19,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg == null) {
-            throw new Exception("msg为空！");
-        }
-
 
         CustomMsg entityMessage = (CustomMsg) msg;
 

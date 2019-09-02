@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 /**
  * 消息协议数据包
@@ -13,6 +14,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class CustomMsg implements Serializable {
+    public final static String Encoding = "utf-8";
+
     //类型  系统编号 1 表示A系统，2 表示B系统
     private byte type;
 
@@ -24,4 +27,15 @@ public class CustomMsg implements Serializable {
 
     //主题信息
     private String body;
+
+    public int getLength() {
+        if (body != null) {
+            this.length = getBytes().length;
+        }
+        return this.length;
+    }
+
+    public byte[] getBytes() {
+        return this.body.getBytes(Charset.forName(CustomMsg.Encoding));
+    }
 }

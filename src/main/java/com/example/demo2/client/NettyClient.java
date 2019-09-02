@@ -42,14 +42,14 @@ public class NettyClient {
             public void initChannel(SocketChannel ch) throws Exception {
                 ChannelPipeline p = ch.pipeline();
                 p.addLast(new IdleStateHandler(READ_IDEL_TIME, WRITE_IDEL_TIME, ALL_IDEL_TIME, TimeUnit.SECONDS));
-                /*p.addLast(new LengthFieldBasedFrameDecoder(
+                //可以直接用new LengthFieldBasedFrameDecoder(..)，不需要自己定义decoder
+                p.addLast(new CustomDecoder(
                         NettyHostPort.MAX_FRAME_LENGTH,
                         NettyHostPort.LENGTH_FIELD_OFFSET,
                         NettyHostPort.LENGTH_FIELD_LENGTH,
                         NettyHostPort.LENGTH_ADJUSTMENT,
                         NettyHostPort.INITIAL_BYTES_TO_STRIP,
-                        false));*/
-                p.addLast(new CustomDecoder());
+                        false));
                 p.addLast(new CustomEncoder());
                 p.addLast(new ClientHandler());
             }
@@ -108,6 +108,7 @@ public class NettyClient {
             sb.append("中华人民共和国");
         }
         sb.append("正文结束了");
+
         while (true) {
             for (int i = 0; i < 10; i++) {
                 String msgBody = String.format("client %d: %s", i, sb.toString());

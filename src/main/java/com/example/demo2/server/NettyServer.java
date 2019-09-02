@@ -8,7 +8,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,14 +26,14 @@ public class NettyServer {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
-                        /*p.addLast(new LengthFieldBasedFrameDecoder(
+                        //可以直接用new LengthFieldBasedFrameDecoder(..)，不需要自己定义decoder
+                        p.addLast(new CustomDecoder(
                                 NettyHostPort.MAX_FRAME_LENGTH,
                                 NettyHostPort.LENGTH_FIELD_OFFSET,
                                 NettyHostPort.LENGTH_FIELD_LENGTH,
                                 NettyHostPort.LENGTH_ADJUSTMENT,
                                 NettyHostPort.INITIAL_BYTES_TO_STRIP,
-                                false));*/
-                        p.addLast(new CustomDecoder());
+                                false));
                         p.addLast(new CustomEncoder());
                         p.addLast(new ServerHandler());
                     }

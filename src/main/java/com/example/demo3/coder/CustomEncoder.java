@@ -1,7 +1,7 @@
 package com.example.demo3.coder;
 
 import com.example.demo2.protocol.CustomMsg;
-import com.example.demo2.utils.HessianSerializer;
+import com.example.demo3.utils.SerializerUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -27,7 +27,7 @@ public class CustomEncoder extends MessageToByteEncoder<CustomMsg> {
         out.writeInt(bodyBytes.length);   //消息长度
         out.writeBytes(bodyBytes);         //消息正文*/
 
-        byte[] data = HessianSerializer.serialize(msg);
+        byte[] data = SerializerUtils.serialize(msg);
         //先写入消息的长度作为消息头
         out.writeInt(data.length);
         //最后写入消息体字节数组

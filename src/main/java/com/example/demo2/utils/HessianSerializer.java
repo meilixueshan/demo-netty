@@ -7,6 +7,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+/**
+ * 废弃的原因：hessian的性能低于MessagePack，而且序列化出的大小比MessagePack大
+ */
+@Deprecated
 public class HessianSerializer {
     public static <T> byte[] serialize(T obj) {
         byte[] bytes = null;

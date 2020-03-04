@@ -1,5 +1,6 @@
 package com.example.demo3.coder;
 
+import com.example.demo3.protocol.CustomMsg;
 import com.example.demo3.utils.SerializerUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,8 +32,8 @@ public class CustomDecoder extends ByteToMessageDecoder {
         byteBuf.readBytes(data);
 
         //将字节数组使用Hession反序列化为对象
-        Object obj = SerializerUtils.deserialize(data, Object.class);
+        CustomMsg customMsg = SerializerUtils.deserialize(data, CustomMsg.class);
 
-        out.add(obj);
+        out.add(customMsg);
     }
 }

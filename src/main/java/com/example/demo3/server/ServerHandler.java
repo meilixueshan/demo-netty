@@ -2,11 +2,10 @@ package com.example.demo3.server;
 
 
 import com.example.demo3.protocol.CustomMsg;
-import com.example.demo3.protocol.ProtocolFlag;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -15,10 +14,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends SimpleChannelInboundHandler<CustomMsg> {
     private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
+    protected void channelRead0(ChannelHandlerContext ctx, CustomMsg customMsg) throws Exception {
+        ctx.channel().writeAndFlush(customMsg);
+    }
+
+    /*@Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg == null) {
             throw new Exception("msg为空！");
@@ -48,7 +52,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         ctx.channel().writeAndFlush(entityMessage);
-    }
+    }*/
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {

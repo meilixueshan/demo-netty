@@ -3,6 +3,7 @@ package com.example.demo3.protocol;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.msgpack.annotation.Message;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Message
 public class CustomMsg implements Serializable {
     //类型  系统编号 1 表示A系统，2 表示B系统
     private byte type;

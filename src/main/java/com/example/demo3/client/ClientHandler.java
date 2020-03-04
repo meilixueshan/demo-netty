@@ -1,8 +1,7 @@
 package com.example.demo3.client;
 
-import com.example.demo2.NettyHostPort;
-import com.example.demo2.client.NettyClient;
-import com.example.demo2.protocol.CustomMsg;
+import com.example.demo3.NettyHostPort;
+import com.example.demo3.protocol.CustomMsg;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.EventLoop;
@@ -41,7 +40,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             public void run() {
                 log.error("服务器连不上，开始重连操作...");
 
-                com.example.demo2.client.NettyClient client = new NettyClient(NettyHostPort.HOST, NettyHostPort.PORT);
+                NettyClient client = new NettyClient(NettyHostPort.HOST, NettyHostPort.PORT);
                 client.start();
             }
         }, 1L, TimeUnit.SECONDS);
@@ -62,15 +61,26 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
-            if (event.state().equals(IdleState.READER_IDLE)) {
+            IdleState state = event.state();
+            if (state == IdleState.READER_IDLE) {
                 log.info("长期没收到服务器推送数据");
-            } else if (event.state().equals(IdleState.WRITER_IDLE)) {
+            } else if (state == IdleState.WRITER_IDLE) {
                 log.info("长期未向服务器发送数据");
 
-                ctx.writeAndFlush("x");    //发送心跳包
-            } else if (event.state().equals(IdleState.ALL_IDLE)) {
+                ctx.writeAndFlush(buildHeartBeat());    //发送心跳包
+            } else if (state == IdleState.ALL_IDLE) {
                 log.info("长期没有数据接收或者发送");
             }
         }
+    }
+
+    private CustomMsg buildHeartBeat() {
+        String msgBody = "";
+        CustomMsg customMsg = new CustomMsg(
+                (byte) 0xAB,
+                (byte) 0xCD,
+                msgBody.length(),
+                msgBody);
+        return customMsg;
     }
 }

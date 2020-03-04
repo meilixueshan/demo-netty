@@ -1,6 +1,6 @@
 package com.example.demo3.coder;
 
-import com.example.demo2.protocol.CustomMsg;
+import com.example.demo3.protocol.CustomMsg;
 import com.example.demo3.utils.SerializerUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

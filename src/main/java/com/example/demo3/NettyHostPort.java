@@ -2,7 +2,7 @@ package com.example.demo3;
 
 public class NettyHostPort {
     public static final String HOST = "127.0.0.1";
-    public static final int PORT = 8889;
+    public static final int PORT = 8887;
 
 
     /**
